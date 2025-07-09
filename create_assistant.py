@@ -1,7 +1,7 @@
 import os
 import openai
 
-# Load API key from environment variables
+# Load API key from environment variable
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("OPEN_API_KEY not set in environment variables.")
