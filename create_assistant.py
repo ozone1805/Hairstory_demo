@@ -6,8 +6,8 @@ import sys
 
 # Constants
 API_BASE_URL = "https://api.openai.com/v1"
-FILE_PATH = "fakecatalog.txt"
-ASSISTANT_NAME = "Hairstory demo v3"
+FILE_PATH = "product_catalogue.txt"
+ASSISTANT_NAME = "Hairstory demo v5"
 VECTOR_STORE_NAME = "Hairstory Product Catalog"
 MAX_RETRIES = 30
 POLL_INTERVAL = 2
