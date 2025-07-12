@@ -74,14 +74,20 @@ def main():
         if i < len(products):  # Don't delay after the last product
             time.sleep(1)
     
-    # Save all products to JSONL format
-    output_path = "product_catalogue.txt"
-    with open(output_path, "w", encoding="utf-8") as f:
+    # Save all products to JSONL format (product_catalogue.txt)
+    jsonl_output_path = "product_catalogue.txt"
+    with open(jsonl_output_path, "w", encoding="utf-8") as f:
         for product in all_products:
             f.write(json.dumps(product, ensure_ascii=False) + '\n')
     
+    # Save all products to JSON format (all_products.json)
+    json_output_path = "all_products.json"
+    with open(json_output_path, "w", encoding="utf-8") as f:
+        json.dump(all_products, f, indent=2, ensure_ascii=False)
+    
     print(f"\nScraped {len(all_products)} products")
-    print(f"Results saved to: {output_path}")
+    print(f"Results saved to: {jsonl_output_path} (JSONL format)")
+    print(f"Results saved to: {json_output_path} (JSON format)")
     
     # Print summary
     successful = sum(1 for p in all_products if "error" not in p)
