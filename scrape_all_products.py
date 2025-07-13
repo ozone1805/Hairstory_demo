@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import json
 import time
 import sys
+import re
 
 def classify_product_type(product_name, soup):
     """
@@ -64,7 +65,11 @@ def scrape_product_details(url, product_name):
         for key, selector in selectors.items():
             element = soup.select_one(selector)
             if element:
-                results[key] = element.get_text(strip=True)
+                text_content = element.get_text(strip=True)
+                # Apply formatting fix to benefits field
+                if key == "benefits":
+                    text_content = fix_benefits_formatting(text_content)
+                results[key] = text_content
             else:
                 results[key] = None
         
@@ -94,6 +99,19 @@ def scrape_product_details(url, product_name):
         print(f"Error scraping {product_name}: {e}")
         return {"name": product_name, "url": url, "type": classify_product_type(product_name, None), "error": str(e)}
 
+def fix_benefits_formatting(text):
+    """
+    Fix formatting issues in benefits text by adding spaces between 
+    fully capitalized words and the following lowercase words.
+    """
+    if not text:
+        return text
+    
+    # Improved pattern to match fully capitalized words (including hyphens/spaces) followed by a capitalized word with lowercase
+    pattern = r'([A-Z][A-Z\s-]+)([A-Z][a-z])'
+    fixed_text = re.sub(pattern, r'\1 \2', text)
+    return fixed_text
+
 def main():
     """Main function to scrape all products from CSV."""
     all_products = []
@@ -115,7 +133,7 @@ def main():
         
         # Add a small delay to be respectful to the server
         if i < len(products):  # Don't delay after the last product
-            time.sleep(1)
+            time.sleep(.5)
     
     # Save all products to JSONL format (product_catalogue.txt)
     jsonl_output_path = "product_catalogue.txt"

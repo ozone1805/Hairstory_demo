@@ -2,6 +2,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 import json
+import re
 
 def classify_product_type(product_name, soup):
     """
@@ -22,6 +23,19 @@ def classify_product_type(product_name, soup):
     
     # Everything else is a singleton
     return "singleton"
+
+def fix_benefits_formatting(text):
+    """
+    Fix formatting issues in benefits text by adding spaces between 
+    fully capitalized words and the following lowercase words.
+    """
+    if not text:
+        return text
+    
+    # Improved pattern to match fully capitalized words (including hyphens/spaces) followed by a capitalized word with lowercase
+    pattern = r'([A-Z][A-Z\s-]+)([A-Z][a-z])'
+    fixed_text = re.sub(pattern, r'\1 \2', text)
+    return fixed_text
 
 # Accept URL as a command-line argument, or use default
 if len(sys.argv) > 1:
@@ -64,7 +78,11 @@ for key, selector in selectors.items():
     else:
         element = soup.select_one(selector)
         if element:
-            results[key] = element.get_text(strip=True)
+            text_content = element.get_text(strip=True)
+            # Apply formatting fix to benefits field
+            if key == "benefits":
+                text_content = fix_benefits_formatting(text_content)
+            results[key] = text_content
         else:
             results[key] = None
 

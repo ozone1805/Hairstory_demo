@@ -7,7 +7,7 @@ import sys
 # Constants
 API_BASE_URL = "https://api.openai.com/v1"
 FILE_PATH = "product_catalogue.txt"
-ASSISTANT_NAME = "Hairstory demo v5"
+ASSISTANT_NAME = "Hairstory demo v6"
 VECTOR_STORE_NAME = "Hairstory Product Catalog"
 MAX_RETRIES = 30
 POLL_INTERVAL = 2
@@ -126,7 +126,11 @@ def create_assistant(api_key, vector_store_id):
     
     assistant = openai.beta.assistants.create(
         name=ASSISTANT_NAME,
-        instructions="You are a haircare product expert and always refer to the uploaded product catalog when answering questions. If someone asks you something that's not about haircare, then say you don't know but you're happy to help with hair product recommendations.",
+        instructions="""You are a haircare product expert and always refer to the uploaded product catalog when answering questions. 
+                        If someone asks you something that's not about haircare, then say you don't know but you're happy to help with 
+                        hair product recommendations. For now, the link formatting is not supported, so please use the product name instead. 
+                        First try to reccommend singleton products, but if the user asks for a bundle, or the products your recommend are in a bundle, 
+                        then recommend the bundle.""",
         model="gpt-4o-mini",
         tools=[{"type": "file_search"}],
         tool_resources={
