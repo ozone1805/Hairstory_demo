@@ -26,9 +26,8 @@ def scrape_product_details(url, product_name):
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
-        # Use the original selectors
+        # Use the original selectors (removed title as it only contains first word of product name)
         selectors = {
-            "title": "#MainContent h1 span",
             "subtitle": "#MainContent h2",
             "details": "div#ProductDescription",
             "benefits": "div[content-type='benefit']",
