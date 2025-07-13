@@ -5,6 +5,30 @@ import json
 import time
 import sys
 
+def classify_product_type(product_name, soup):
+    """
+    Classify the product type based on name and page content.
+    
+    Args:
+        product_name (str): The product name
+        soup (BeautifulSoup): Parsed HTML content
+        
+    Returns:
+        str: Product type - "bundle" or "singleton"
+    """
+    # Check for bundle products using specific CSS selector for "set includes"
+    if soup:
+        set_includes_element = soup.select_one('button[content-type="set-includes"]')
+        if set_includes_element:
+            return "bundle"
+    
+    # Check for bundle products (Set or Method in name)
+    if "Set" in product_name or "Method" in product_name:
+        return "bundle"
+    
+    # Everything else is a singleton
+    return "singleton"
+
 def scrape_product_details(url, product_name):
     """
     Scrape product details from a Hairstory product page using the original logic.
@@ -44,11 +68,31 @@ def scrape_product_details(url, product_name):
             else:
                 results[key] = None
         
+        # Add product type classification
+        results["type"] = classify_product_type(product_name, soup)
+        
+        # Extract set_includes for bundle products
+        if results["type"] == "bundle":
+            set_includes_div = soup.select_one('div[content-type="set-includes"]')
+            if set_includes_div:
+                set_includes_items = []
+                li_elements = set_includes_div.find_all('li')
+                for li in li_elements:
+                    if hasattr(li, 'find'):
+                        h3_element = li.find('h3')
+                        if h3_element and hasattr(h3_element, 'get_text'):
+                            set_includes_items.append(h3_element.get_text(strip=True))
+                results["set_includes"] = set_includes_items
+            else:
+                results["set_includes"] = []
+        else:
+            results["set_includes"] = None
+        
         return results
         
     except Exception as e:
         print(f"Error scraping {product_name}: {e}")
-        return {"name": product_name, "url": url, "error": str(e)}
+        return {"name": product_name, "url": url, "type": classify_product_type(product_name, None), "error": str(e)}
 
 def main():
     """Main function to scrape all products from CSV."""
