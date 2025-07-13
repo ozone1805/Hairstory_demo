@@ -78,10 +78,10 @@ def scrape_product_details(url, product_name):
                 set_includes_items = []
                 li_elements = set_includes_div.find_all('li')
                 for li in li_elements:
-                    if hasattr(li, 'find'):
-                        h3_element = li.find('h3')
+                    if li and hasattr(li, 'find'):
+                        h3_element = li.find('h3')  # type: ignore
                         if h3_element and hasattr(h3_element, 'get_text'):
-                            set_includes_items.append(h3_element.get_text(strip=True))
+                            set_includes_items.append(h3_element.get_text(strip=True))  # type: ignore
                 results["set_includes"] = set_includes_items
             else:
                 results["set_includes"] = []
