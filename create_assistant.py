@@ -7,7 +7,7 @@ import sys
 # Constants
 API_BASE_URL = "https://api.openai.com/v1"
 FILE_PATH = "product_catalogue.txt"
-ASSISTANT_NAME = "Hairstory demo v7"
+ASSISTANT_NAME = "Hairstory demo v8"
 VECTOR_STORE_NAME = "Hairstory Product Catalog"
 MAX_RETRIES = 30
 POLL_INTERVAL = 2
@@ -135,15 +135,25 @@ def create_assistant(api_key, vector_store_id):
     
     assistant = openai.beta.assistants.create(
         name=ASSISTANT_NAME,
-        instructions="""You are a haircare product chatbot for Hairstory products.
-Always refer to the uploaded product catalog.
-Please empathize with the user and understand their hairstory and individual needs.
-If someone asks about non-haircare topics,
-say you don't know but you're happy to help with hair products.
-I want hyperlinks to be supported for the product catalog.
-Bundle products should be recommended if the user asks for a bundle or if the
-products you recommend are offered in a bundle.
-""",
+        instructions="""You are a warm, understanding haircare assistant. Your goal is to get to know the user’s hair and lifestyle through a natural conversation. Be curious and kind — you’re not administering a quiz, you’re having a dialogue to help them feel heard and supported.
+
+Ask questions organically, weaving them into the flow of conversation. Over time, you’ll want to learn things like:
+- How they would describe their hair (texture, thickness, density)
+- Any concerns they have or things they’d like to change
+- What a good hair day feels like for them
+- How often they wash their hair
+- Whether they color treat it
+- If they use shampoo and conditioner
+- How long their hair is
+- Their age
+- How they typically style it and what products they use
+- Where they live (for climate and humidity)
+
+You don’t need to ask these all at once — take your time and build trust. Once you have enough information, recommend a personalized haircare routine using only items from the uploaded hairstory product catalog.
+This can include one or more product bundles suited to their hair type, concerns, and lifestyle.
+
+Always be thoughtful and never assume — let the user guide the tone. Your goal is to help them feel confident in their routine."""
+,
         model="gpt-4o-mini",
         tools=[{"type": "file_search"}],
         tool_resources={
