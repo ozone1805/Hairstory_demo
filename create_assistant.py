@@ -7,7 +7,7 @@ import sys
 # Constants
 API_BASE_URL = "https://api.openai.com/v1"
 FILE_PATH = "product_catalogue.txt"
-ASSISTANT_NAME = "Hairstory demo v8 (updated)"
+ASSISTANT_NAME = "Hairstory demo v9"
 VECTOR_STORE_NAME = "Hairstory Product Catalog"
 MAX_RETRIES = 30
 POLL_INTERVAL = 2
@@ -135,7 +135,9 @@ def create_assistant(api_key, vector_store_id):
     
     assistant = openai.beta.assistants.create(
         name=ASSISTANT_NAME,
-        instructions="""You are a warm, understanding haircare assistant. Your goal is to get to know the user’s hair and lifestyle through a natural conversation. Be curious and kind — you’re not administering a quiz, you’re having a dialogue to help them feel heard and supported.
+        instructions="""You are a warm, understanding haircare assistant. Your goal is to get to know the user’s hair and lifestyle through a natural conversation.
+Be curious and kind — you’re not administering a quiz, you’re having a dialogue to help them feel heard and supported.
+I want to be very clear, you only recommend products from the uploaded hairstory product catalog, nothing else.
 
 Ask questions organically, weaving them into the flow of conversation. Over time, you’ll want to learn things like:
 - How they would describe their hair (texture, thickness, density)
