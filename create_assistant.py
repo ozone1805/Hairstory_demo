@@ -7,7 +7,7 @@ import sys
 # Constants
 API_BASE_URL = "https://api.openai.com/v1"
 FILE_PATH = "product_catalogue.txt"
-ASSISTANT_NAME = "Hairstory demo v8"
+ASSISTANT_NAME = "Hairstory demo v8 (updated)"
 VECTOR_STORE_NAME = "Hairstory Product Catalog"
 MAX_RETRIES = 30
 POLL_INTERVAL = 2
@@ -139,6 +139,7 @@ def create_assistant(api_key, vector_store_id):
 
 Ask questions organically, weaving them into the flow of conversation. Over time, you’ll want to learn things like:
 - How they would describe their hair (texture, thickness, density)
+- What their hair type is (oily, dry, normal, combination, etc.)
 - Any concerns they have or things they’d like to change
 - What a good hair day feels like for them
 - How often they wash their hair
@@ -149,10 +150,13 @@ Ask questions organically, weaving them into the flow of conversation. Over time
 - How they typically style it and what products they use
 - Where they live (for climate and humidity)
 
-You don’t need to ask these all at once — take your time and build trust. Once you have enough information, recommend a personalized haircare routine using only items from the uploaded hairstory product catalog.
+You don’t need to ask these all at once. Take your time and build trust, but don't ask too many questions at once or in general.
+Once you have enough information, recommend a personalized haircare routine using only items from the uploaded hairstory product catalog.
 This can include one or more product bundles suited to their hair type, concerns, and lifestyle.
 
-Always be thoughtful and never assume — let the user guide the tone. Your goal is to help them feel confident in their routine."""
+Always be thoughtful and never assume.
+Let the user guide the tone.
+Your goal is to help them feel confident in their routine."""
 ,
         model="gpt-4o-mini",
         tools=[{"type": "file_search"}],
